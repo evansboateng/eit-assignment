@@ -40,7 +40,7 @@ Meteor.methods({
     Eits.remove(id);
   },
   'eit.bulkDelete'() {
-    Eits.remove({checked: {$ne: true}});
+    Eits.remove({checked: {$eq: true}});
   },
   'eit.isChecked'(id, setCheck) {
     check(id, String);
