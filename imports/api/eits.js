@@ -9,7 +9,7 @@ Meteor.methods({
     check(createObj, Object);
     const {firstName, surname, age, country} = createObj;
 
-    if (!userId) throw new Meteor.Error('not-authorized');
+    if (!Meteor.user()) throw new Meteor.Error('not-authorized');
 
     Eits.insert({
       firstName,
