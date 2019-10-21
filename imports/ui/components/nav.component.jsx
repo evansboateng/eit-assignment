@@ -9,8 +9,10 @@ const Nav = () => {
       <a href="#" className="navbar-brand">
         EIT Management App
       </a>
-      <div className="col-3 float-right ml-auto btn btn-primary">
-        <AccountsUIWrapper />
+      <div className="col-3 float-right ml-auto">
+        <button className="btn btn-primary">
+          <AccountsUIWrapper />
+        </button>
       </div>
     </nav>
   );
