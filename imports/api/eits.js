@@ -24,7 +24,8 @@ Meteor.methods({
     check(eitId, String);
     check(updateObj, Object);
 
-    if (!this.userId) throw new Meteor.Error('not-authorized');
+    if (!Meteor.user() && !this.userId)
+      throw new Meteor.Error('not-authorized');
 
     const {firstName, surname, age, country} = updateObj;
     Eits.update(eitId, {
@@ -40,14 +41,22 @@ Meteor.methods({
   'eit.delete'(id) {
     check(id, String);
 
+    if (!Meteor.user() && !this.userId)
+      throw new Meteor.Error('not-authorized');
+
     Eits.remove(id);
   },
   'eit.bulkDelete'() {
+    if (!Meteor.user() && !this.userId)
+      throw new Meteor.Error('not-authorized');
     Eits.remove({checked: {$eq: true}});
   },
   'eit.isChecked'(id, setCheck) {
     check(id, String);
     check(setCheck, Boolean);
+
+    if (!Meteor.user() && !this.userId)
+      throw new Meteor.Error('not-authorized');
 
     Eits.update(id, {$set: {checked: setCheck}});
   }
