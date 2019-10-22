@@ -15,6 +15,7 @@ const Input = props => {
         readOnly={props.readOnly}
         defaultValue={props.defaultValue}
         checked={props.checked}
+        onClick={props.onClick}
       />
     </div>
   );

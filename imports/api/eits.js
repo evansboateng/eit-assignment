@@ -16,12 +16,15 @@ Meteor.methods({
       surname,
       age,
       country,
+      addedBy: this.userId,
       createdAt: new Date()
     });
   },
   'eit.update'(eitId, updateObj) {
     check(eitId, String);
     check(updateObj, Object);
+
+    if (!this.userId) throw new Meteor.Error('not-authorized');
 
     const {firstName, surname, age, country} = updateObj;
     Eits.update(eitId, {

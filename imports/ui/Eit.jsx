@@ -7,7 +7,6 @@ import {Eits} from '../api/eits.js';
 
 // Eit component
 const Eit = props => {
-  console.log(props);
   const [checked, setChecked] = useState(false);
   // delete handler
   const deleteHandler = () => {
@@ -18,22 +17,22 @@ const Eit = props => {
 
   const isChecked = e => {
     e.preventDefault();
-    setChecked(e.target.checked);
-    Meteor.call('eit.isChecked', props.id, checked);
-    console.log(props.checked);
+    // setChecked(e.target.checked);
+    Meteor.call('eit.isChecked', props.id, e.target.checked);
+    console.log(e.target.checked);
   };
 
   return (
     <tr key={props._id}>
       <th scope="row">
-        {props.currentUser ? (
+        {props.currentUser && props.currentUser._id === props.addedBy ? (
           <Input
             divClass={'form-check'}
             type={'checkbox'}
             className={'form-check-input'}
-            onChange={isChecked}
+            onClick={isChecked}
             readOnly
-            checked={checked}
+            checked={props.checked}
           />
         ) : (
           ''
@@ -44,7 +43,7 @@ const Eit = props => {
       <td>{props.age}</td>
       <td>{props.country}</td>
       <td>
-        {props.currentUser ? (
+        {props.currentUser && props.currentUser._id === props.addedBy ? (
           <div>
             <Link to={`/edit/${props.id}`} className="btn btn-sm btn-light">
               Edit

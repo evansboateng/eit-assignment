@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import {withRouter} from 'react-router-dom';
 import {Meteor} from 'meteor/meteor';
-
+import {withTracker} from 'meteor/react-meteor-data';
 import {Eits} from '../api/eits.js';
+import {Link} from 'react-router-dom';
 
 // components
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -16,7 +16,8 @@ const Form = props => {
   const [inputsForm, setInputs] = useState(initialValue);
 
   //   Get user
-  const user = Eits.findOne(props.userId);
+  // const user = Eits.findOne({_id: {$eq: props.match.params.id}});
+  const user = props.user;
 
   // handle input changes
   const handleInputChange = e => {
@@ -38,12 +39,17 @@ const Form = props => {
     Meteor.call('eit.update', user._id, updatedObj);
 
     props.history.push('/');
-    // return <Redirect to="/" />;
   };
 
   return (
     <form onSubmit={updateHandler}>
-      <Input defaultValue={user._id} name="id" readOnly type={'text'} hidden />
+      <Input
+        defaultValue={props.user._id}
+        name="id"
+        readOnly
+        type={'text'}
+        hidden
+      />
       <Input
         divClass={'form-group'}
         htmlFor={'surname'}
@@ -89,24 +95,22 @@ const Form = props => {
         className={'btn btn-primary'}
         buttonName={'Update'}
       />
-      <Botton
-        type={'submit'}
-        className={'btn btn-secondary-outline ml-3'}
-        buttonName={'Cancel'}
-      />
+      <Link to="/" className="btn btn-secondary-outlone">
+        Cancel
+      </Link>
     </form>
   );
 };
 
 const Edit = props => {
-  console.log(props);
+  console.log(props.user);
   return (
     <div>
       <Nav />
-      <div className="container">
+      <div className="container my-5">
         <div className="card">
           <div className="card-body">
-            <Form userId={props.match.params.id} {...props} />
+            {props.user ? <Form {...props} /> : ''}
           </div>
         </div>
       </div>
@@ -114,4 +118,10 @@ const Edit = props => {
   );
 };
 
-export default withRouter(Edit);
+export default withTracker(props => {
+  const id = props.match.params.id;
+  console.log(id);
+  return {
+    user: Eits.findOne({_id: id})
+  };
+})(Edit);

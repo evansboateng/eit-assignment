@@ -18,7 +18,9 @@ const RenderData = props => {
       firstName={eit.firstName}
       surname={eit.surname}
       age={eit.age}
+      checked={eit.checked}
       country={eit.country}
+      addedBy={eit.addedBy}
     />
   ));
 };
@@ -31,6 +33,7 @@ const App = props => {
     Meteor.call('eit.bulkDelete');
     console.log('something');
   };
+  console.log(props.eits);
 
   return (
     <div>
@@ -52,8 +55,8 @@ const App = props => {
         ) : (
           ''
         )}
-        <table className="table table-striped table-dark">
-          <thead>
+        <table className="table table-striped table-bordered">
+          <thead className="thead-dark">
             <tr>
               <th scope="col"></th>
               <th scope="col">Firstname</th>
