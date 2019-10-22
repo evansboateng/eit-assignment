@@ -120,7 +120,6 @@ const Edit = props => {
 
 export default withTracker(props => {
   const id = props.match.params.id;
-  console.log(id);
   return {
     user: Eits.findOne({_id: id})
   };

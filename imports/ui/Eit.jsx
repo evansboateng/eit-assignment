@@ -19,7 +19,6 @@ const Eit = props => {
     e.preventDefault();
     // setChecked(e.target.checked);
     Meteor.call('eit.isChecked', props.id, e.target.checked);
-    console.log(e.target.checked);
   };
 
   return (

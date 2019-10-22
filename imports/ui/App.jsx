@@ -31,9 +31,7 @@ const App = props => {
   const bulkDelete = e => {
     e.preventDefault();
     Meteor.call('eit.bulkDelete');
-    console.log('something');
   };
-  console.log(props.eits);
 
   return (
     <div>
@@ -55,21 +53,25 @@ const App = props => {
         ) : (
           ''
         )}
-        <table className="table table-striped table-bordered">
-          <thead className="thead-dark">
-            <tr>
-              <th scope="col"></th>
-              <th scope="col">Firstname</th>
-              <th scope="col">Surname</th>
-              <th scope="col">Date of Birth</th>
-              <th scope="col">Country</th>
-              <th scope="col"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <RenderData eits={props.eits} {...props} />
-          </tbody>
-        </table>
+        <div className="card">
+          <div className="card-body">
+            <table className="table table-striped table-bordered">
+              <thead className="thead-dark">
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Firstname</th>
+                  <th scope="col">Surname</th>
+                  <th scope="col">Date of Birth</th>
+                  <th scope="col">Country</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <RenderData eits={props.eits} {...props} />
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   );
