@@ -4,12 +4,18 @@ import {check} from 'meteor/check';
 
 export const Eits = new Mongo.Collection('eits');
 
+if (Meteor.isServer) {
+  Meteor.publish('eits', () => {
+    return Eits.find();
+  });
+}
+
 Meteor.methods({
   'eit.insert'(createObj) {
     check(createObj, Object);
     const {firstName, surname, age, country} = createObj;
 
-    if (!Meteor.user()) throw new Meteor.Error('not-authorized');
+    if (!this.userId) throw new Meteor.Error('not-authorized');
 
     Eits.insert({
       firstName,
@@ -24,8 +30,11 @@ Meteor.methods({
     check(eitId, String);
     check(updateObj, Object);
 
-    if (!Meteor.user() && !this.userId)
-      throw new Meteor.Error('not-authorized');
+    // get the addedBy
+    const doc = Eits.findOne({_id: eitId});
+
+    // check if user is logged in and eit was added by user
+    if (doc.addedBy !== this.userId) throw new Meteor.Error('not-authorized');
 
     const {firstName, surname, age, country} = updateObj;
     Eits.update(eitId, {
@@ -41,21 +50,32 @@ Meteor.methods({
   'eit.delete'(id) {
     check(id, String);
 
-    if (!Meteor.user() && !this.userId)
-      throw new Meteor.Error('not-authorized');
+    // get the addedBy
+    const doc = Eits.findOne({_id: id});
+
+    // check if user is logged in and eit was added by user
+    if (doc.addedBy !== this.userId) throw new Meteor.Error('not-authorized');
 
     Eits.remove(id);
   },
   'eit.bulkDelete'() {
-    if (!Meteor.user() && !this.userId)
-      throw new Meteor.Error('not-authorized');
+    // get the addedBy
+    // const doc = Eits.findOne({_id: eitId});
+
+    // check if user is logged in and eit was added by user
+    if (!this.userId) throw new Meteor.Error('not-authorized');
+
     Eits.remove({checked: {$eq: true}});
   },
   'eit.isChecked'(id, setCheck) {
     check(id, String);
     check(setCheck, Boolean);
 
-    if (!Meteor.user() && !this.userId)
+    // get the addedBy
+    const doc = Eits.findOne({_id: eitId});
+
+    // check if user is logged in and eit was added by user
+    if (!this.userId && doc.addedBy !== this.userId)
       throw new Meteor.Error('not-authorized');
 
     Eits.update(id, {$set: {checked: setCheck}});

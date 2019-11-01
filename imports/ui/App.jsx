@@ -78,6 +78,7 @@ const App = props => {
 };
 
 export default withTracker(() => {
+  Meteor.subscribe('eits');
   return {
     eits: Eits.find({}, {sort: {createdAt: -1}}).fetch(),
     currentUser: Meteor.user()
